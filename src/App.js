@@ -3,6 +3,7 @@ import axios from "axios";
 import "./styles.css";
 import Search from "./Search";
 import WeatherResult from "./WeatherResult";
+import Footer from './Footer';
 
 export default function App() {
   const [city, setCity] = useState("");
@@ -20,7 +21,7 @@ export default function App() {
         return;
       }
 
-      const apiKey = "41at4c04f5a3b46cad70ddb313o279b2"; // Replace with your SheCodes API key
+      const apiKey = "41at4c04f5a3b46cad70ddb313o279b2";
       const url = `https://api.shecodes.io/weather/v1/forecast?query=${query}&key=${apiKey}&units=metric`;
 
       console.log("Fetching weather data from:", url);
@@ -29,20 +30,19 @@ export default function App() {
 
       console.log("Response data:", response.data);
 
-      // Check if the response contains the expected data structure
       if (
         response.data &&
         response.data.daily &&
         response.data.daily.length > 0
       ) {
-        const daily = response.data.daily[0]; // Assuming you want the first day's weather
+        const daily = response.data.daily[0]; 
         setCity(query);
         setWeatherData({
           temperature: daily.temperature.day,
           description: daily.condition.description,
           humidity: daily.temperature.humidity,
           windSpeed: daily.wind.speed,
-          iconUrl: daily.condition.icon_url, // Include the icon URL
+          iconUrl: daily.condition.icon_url, 
         });
         setError("");
         setHasError(false);
@@ -78,6 +78,7 @@ export default function App() {
           />
         </div>
       )}
+      <Footer />
     </div>
   );
 }

@@ -1,29 +1,24 @@
-import React, { useState } from "react";
+import React from 'react';
 
-export default function Search({ onSearch, hasError }) {
-  const [city, setCity] = useState("");
-
-  const updateCity = (event) => {
-    setCity(event.target.value);
-  };
-
-  const handleSearch = (event) => {
+const Search = ({ setCity }) => {
+  const handleSearchSubmit = (event) => {
     event.preventDefault();
-    onSearch(city);
+    const searchInput = event.target.elements.city.value;
+    setCity(searchInput);
   };
 
   return (
-    <div>
-      <form onSubmit={handleSearch}>
-        <input
-          type="search"
-          placeholder="Type a city"
-          value={city}
-          onChange={updateCity}
-          className={hasError ? "error-input" : ""}
-        />
-        <input type="submit" value="Search" />
-      </form>
-    </div>
+    <form className="search-form" onSubmit={handleSearchSubmit}>
+      <input
+        type="search"
+        placeholder="Enter a city.."
+        required
+        name="city"
+        className="search-form-input"
+      />
+      <input type="submit" value="Search" className="search-form-button" />
+    </form>
   );
-}
+};
+
+export default Search;

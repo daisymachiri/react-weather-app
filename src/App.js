@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import axiosRetry from 'axios-retry';
 import Search from './Search';
 import WeatherResult from './WeatherResult';
 import Footer from './Footer';
@@ -11,10 +12,21 @@ const App = () => {
   const [city, setCity] = useState('Johannesburg');
   const [units, setUnits] = useState('metric');
 
+  axiosRetry(axios, { 
+    retries: 3,
+    retryDelay: (retryCount) => {
+      return retryCount * 1000; // time interval between retries
+    },
+    retryCondition: (error) => {
+      // retry only if the error status is 429 (Too Many Requests)
+      return error.response && error.response.status === 429;
+    }
+  });
+
   useEffect(() => {
     const fetchWeatherData = async (city) => {
       try {
-        const apiKey = 'b2a5adcct04b33178913oc335f405433';
+        const apiKey = '41at4c04f5a3b46cad70ddb313o279b2';
         const currentWeatherUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=${units}`;
         const forecastUrl = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}&units=${units}`;
 
@@ -22,7 +34,7 @@ const App = () => {
           axios.get(currentWeatherUrl),
           axios.get(forecastUrl),
         ]);
-
+      
         setWeatherData({
           ...currentWeatherResponse.data,
           forecast: forecastResponse.data.daily,

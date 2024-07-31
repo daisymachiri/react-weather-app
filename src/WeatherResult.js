@@ -5,7 +5,7 @@ const WeatherResult = ({ weatherData, units }) => {
     return null; // Prevent rendering if there's no weather data
   }
 
-  const { city, condition, temperature, time, wind } = weatherData; // Removed forecast from destructuring
+  const { city, condition, temperature, time, wind, forecast } = weatherData;
 
   // Access humidity from the temperature object
   const humidity = temperature.humidity;
@@ -23,6 +23,13 @@ const WeatherResult = ({ weatherData, units }) => {
     return `${day} ${hours}:${minutes}`;
   };
 
+  const formatDay = (timestamp) => {
+    let date = new Date(timestamp * 1000);
+    let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    return days[date.getDay()];
+  };
+
   const unitSymbol = units === 'metric' ? '°C' : '°F';
 
   return (
@@ -33,7 +40,9 @@ const WeatherResult = ({ weatherData, units }) => {
           <p className="weather-app-details">
             <span>{formatDate(new Date(time * 1000))}</span>, {condition.description}
             <br />
-            Humidity: <strong>{humidity}%</strong>, Wind: <strong>{wind.speed} {units === 'metric' ? 'km/h' : 'mph'}</strong>
+            Humidity: <strong>{humidity}%</strong>,
+            <br /> 
+            Wind: <strong>{wind.speed} {units === 'metric' ? 'km/h' : 'mph'}</strong>
           </p>
         </div>
         <div className="weather-app-temperature-container">
@@ -43,6 +52,20 @@ const WeatherResult = ({ weatherData, units }) => {
           <div className="weather-app-temperature">{Math.round(temperature.current)}</div>
           <div className="weather-app-unit">{unitSymbol}</div>
         </div>
+      </div>
+      <div className="weather-forecast" id="forecast">
+        {forecast && forecast.slice(0, 7).map((day, index) => (
+          <div key={index} className="weather-forecast-day">
+            <div className="weather-forecast-date">{formatDay(day.time)}</div>
+            <img src={day.condition.icon_url} className="weather-forecast-icon" alt="forecast icon" />
+            <div className="weather-forecast-temperatures">
+              <div className="weather-forecast-temperature">
+                <strong>{Math.round(day.temperature.maximum)}º</strong>
+              </div>
+              <div className="weather-forecast-temperature">{Math.round(day.temperature.minimum)}º</div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

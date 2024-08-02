@@ -26,7 +26,7 @@ const App = () => {
   useEffect(() => {
     const fetchWeatherData = async (city) => {
       try {
-        const apiKey = '41at4c04f5a3b46cad70ddb313o279b2';
+        const apiKey = 'b1a8336ff1e05b64da5625e4158fbea3';
         const currentWeatherUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=${units}`;
         const forecastUrl = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}&units=${units}`;
 

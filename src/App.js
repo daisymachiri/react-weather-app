@@ -18,7 +18,6 @@ const App = () => {
       return retryCount * 1000; // time interval between retries
     },
     retryCondition: (error) => {
-      // retry only if the error status is 429 (Too Many Requests)
       return error.response && error.response.status === 429;
     }
   });
@@ -26,7 +25,7 @@ const App = () => {
   useEffect(() => {
     const fetchWeatherData = async (city) => {
       try {
-        const apiKey = 'b1a8336ff1e05b64da5625e4158fbea3';
+        const apiKey = process.env.REACT_APP_API_KEY;
         const currentWeatherUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=${units}`;
         const forecastUrl = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}&units=${units}`;
 
